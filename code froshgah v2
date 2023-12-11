@@ -1,0 +1,61 @@
+# تعریف تابع برای ذخیره اطلاعات کالاها در فایل
+def save_products(products):
+    with open('products.txt', 'w') as f:
+        for product in products:
+            f.write(f"{product['name']},{product['quantity']},{product['price'],{product['expiration_date']}}\n")
+
+# تعریف تابع برای خواندن اطلاعات کالاها از فایل
+def read_products():
+    products = []
+    with open('products.txt', 'r') as f:
+        for line in f:
+            name, quantity, price = line.strip().split(',')
+            products.append({'name': name, 'quantity': int(quantity), 'price': int(price), 'expiration_date':int(expiration_date)})
+    return products
+
+# تعریف تابع برای خرید محصول
+def buy_product(products, name, quantity, expiration_date):
+    for product in products:
+        if product['name'] == name:
+            if product['quantity'] >= quantity:
+                product['quantity'] -= quantity
+                save_products(products)
+                print(f"You bought {quantity} {name} for {quantity * product['price']} toman v tarikhengheza {expiration_date}.")
+            else:
+                print(f"Sorry, there are only {product['quantity']} {name}(s) available.")
+            return
+    print(f"Sorry, we don't have {name} in stock.")
+
+# اجرای برنامه
+products = []
+while True:
+    print("1. Add product")
+    print("2. Buy product")
+    print("3. expiration_date")
+    print("4. Exit")
+    choice = input("Enter your choice: ")
+    if choice == '1':
+        name = input("Enter product name: ")
+        quantity = int(input("Enter quantity: "))
+        price = int(input("Enter price: "))
+        expiration_date = int(input("Enter expiration_date: "))
+        products.append({'name': name, 'quantity': quantity, 'price': price , 'expiration_date':expiration_date})
+        save_products(products)
+    elif choice == '2':
+        name = input("Enter product name: ")
+        quantity = int(input("Enter quantity: "))
+        buy_product(products, name, quantity, expiration_date)
+    elif choice == '3':
+        expiration_date = input("Enter expiration_date: ")
+        buy_product(products, name, quantity , expiration_date)
+    elif choice == '4':
+        break
+    else:
+        print("Invalid choice!")
+        continue
+
+# چاپ اطلاعات محصولات برای بررسی
+products = read_products()
+print("Product\t\tQuantity\tPrice")
+for product in products:
+    print(f"{product['name']}\t\t{product['quantity']}\t\t{product['price']}")
